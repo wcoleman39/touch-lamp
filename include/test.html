@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='icon' type='image/x-icon' href='gear_icon.ico'>
+    <title>Touch Lamp Configuration</title>
+    <style>
+        div,
+        select {
+            width: auto;
+            font-size: medium;
+            padding: 5px;
+            border-radius: 5px;
+            border-color: lightgray;
+        }
+
+        input {
+            width: auto;
+            font-size: medium;
+            padding: 5px;
+            border-radius: 5px;
+            border-color: lightgray;
+            text-align: center;
+        }
+
+        input.color {
+            width: 100px;
+            height: 50px;
+            border: 0px;
+            border-color: lightgray;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        input.range {
+            width: auto;
+            accent-color: steelblue;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        output {
+            font-family: sans-serif;
+            font-size: medium;
+            color: gray;
+        }
+
+        body {
+            text-align: center;
+        }
+
+        header {
+            font-family: sans-serif;
+            font-size: x-large;
+            font-family: sans-serif;
+        }
+
+        button {
+            background-color: steelblue;
+            color: #fff;
+            padding: 5px;
+            font-size: medium;
+            width: auto;
+            border-radius: 5px;
+            border: 0ch;
+            cursor: pointer;
+            transition: 0.2s all;
+        }
+
+        button:active {
+            background-color: #1e3c4b;
+            transform: scale(0.97)
+        }
+
+        fieldset {
+            border-radius: 5px;
+            margin: auto;
+            width: 80%;
+        }
+
+        label {
+            padding: 5px;
+            font-size: medium;
+            font-family: sans-serif;
+            color: gray;
+        }
+
+        table,
+        th,
+        tr,
+        td {
+            font-family: sans-serif;
+            text-align: left;
+            margin-left: auto;
+            margin-right: auto;
+            border-style: solid;
+            border-color: gray;
+            border-width: 2px;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+        img.icon {
+            width: 40px;
+            height: 40px;
+            filter: invert(55%) sepia(5%) saturate(6%) hue-rotate(351deg) brightness(91%) contrast(90%);
+        }
+    </style>
+</head>
+<div style='text-align:left;display:inline-block;min-width:260px;'></div>
+<div>
+    <fieldset> <img src='gear_icon.ico' class='icon' alt='Configuration'>
+        <header>Configuration</header> <br>
+        <div> <label hidden>Touch Lamp Name</label> <input title='Touch Lamp Name' placeholder='5 (unchanged)' id='nm'
+                data-chg='0' onchange="chg('nm')"> </div>
+        <div></div>
+        <div> <label hidden>WiFi Name (SSID)</label> <select title='WiFi Name (SSID)' id='id' data-chg='0'
+                onchange="chg('id')">
+                <option disabled selected style='color:gray'>TP-Link_0B3F (unchanged)</option>
+                <option>TP-Link_0B3F</option>
+                <option>Hope</option>
+                <option>NETGEAR03</option>
+                <option>Portal</option>
+                <option>Lakeside</option>
+                <option>NETGEAR24</option>
+                <option>TP-Link_0B3F</option>
+                <option>Hope</option>
+                <option>NETGEAR03</option>
+                <option>Portal</option>
+                <option>Lakeside</option>
+                <option>NETGEAR24</option>
+                <option>TP-Link_0B3F</option>
+                <option>Hope</option>
+                <option>NETGEAR03</option>
+                <option>Portal</option>
+                <option>Lakeside</option>
+                <option>NETGEAR24</option>
+            </select> </div>
+        <div> <label hidden>Password</label> <input title='Password' placeholder='******** (unchanged)' type='password'
+                id='pw' data-chg='0' onchange="chg('pw')"> <br> <input type='checkbox' onclick='showPw()'> <label>Show
+                Password</label> </div>
+        <div></div>
+        <div> <label>Assigned Color</label><br> <input class='color' title='Assigned Color' type='color' value='#00ff00'
+                id='col' data-chg='0' onchange="chg('col')"> </div>
+        <div></div>
+        <div> <label>Brightness</label><br> <input class='range' title='Lamp Brightness' type='range' min='0' max='255'
+                value='64' id='brt' data-chg='0' oninput="document.getElementById('brtval').value=this.value"
+                onchange="chg('brt')"> <br> <output id='brtval'>64</output> </div> <br>
+        <div> <button onclick='sv()'>Save and Restart</button> </div>
+    </fieldset>
+    <script
+        id='jsbin-javascript'> function showPw() { var x = document.getElementById('pw'); if (x.type === 'password') { x.type = 'text'; } else { x.type = 'password'; } } function chg(key) { document.getElementById(key).dataset.chg = '1'; console.log('key modified: ' + key); } function sv() { console.log('sv()'); var params = 'req=1'; for (const key of ['id', 'pw', 'nm', 'col', 'brt']) { if (document.getElementById(key).dataset.chg == '1') { var value = document.getElementById(key).value params += ('&' + encodeURIComponent(key) + '=' + encodeURIComponent(value)); console.log('added param: (key: ' + key + '; val: ' + value + ')'); } } console.log(''); if (!params.includes('&')) { alert('No configuration modified, restarting.'); } var request = new XMLHttpRequest(); var url = '/config'; request.open('POST', url, true); request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded'); request.onreadystatechange = function () { console.log('response: ' + request.responseText + ' (status: ' + request.statusText + ')'); }; console.log('params: ' + params); console.log('url: ' + url); request.send(params); } </script>
+</div>
+<div>
+    <fieldset> <img src='box-health-pulse-status.ico' class='icon' alt='Status'>
+        <header>Status</header>
+        <div>
+            <table>
+                <tr>
+                    <td>Board Name</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>SSID</td>
+                    <td>TP-Link_0B3F</td>
+                </tr>
+                <tr>
+                    <td>Assigned Color</td>
+                    <td>#00ff00</td>
+                </tr>
+                <tr>
+                    <td>Lamp Brightness</td>
+                    <td>64</td>
+                </tr>
+            </table>
+        </div>
+    </fieldset>
+</div>
+
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <link rel='icon' type='image/x-icon' href='gear_icon.ico'>
+        <title>Touch Lamp Configuration</title>     
+        <style>
+            div,
+            select {
+                width: auto;
+                font-size: medium;
+                padding: 5px;
+                border-radius: 5px;
+                border-color: lightgray;
+            }
+            input {
+                width: auto;
+                font-size: medium;
+                padding: 5px;
+                border-radius: 5px;
+                border-color: lightgray;
+                text-align: center;
+            }
+            input.color {
+                width: 100px;
+                height: 50px;
+                border: 0px;
+                border-color: lightgray;
+                padding: 5px;
+            }
+            input.range {
+                width: auto;
+                accent-color: steelblue;
+                padding: 5px;
+            }
+            output {
+                font-family:  sans-serif;
+                font-size: medium;
+                color: gray;
+            }
+            body {
+                text-align: center;
+            }
+            header {
+                font-family:  sans-serif;
+                font-size: x-large;
+                font-family: sans-serif;
+            }
+            button {
+                background-color: steelblue;
+                color: #fff;
+                padding: 5px;
+                font-size: medium;
+                width: auto;
+                border-radius: 5px;
+                border: 0ch;
+            }
+            fieldset {
+                border-radius: 5px;
+                margin: auto;
+                width: 80%;
+            }
+            label {
+                padding: 5px;
+                font-size: medium;
+                font-family:  sans-serif;
+                color: gray;
+            }
+            table, th, tr, td {
+                font-family:  sans-serif;
+                text-align: left;
+                margin-left: auto;
+                margin-right: auto;
+                border-style: solid;
+                border-color: gray;
+                border-width: 2px;
+                border-collapse: collapse;
+                padding: 5px;
+            }
+            img.icon {
+                width: 40px;
+                height: 40px;
+            }
+        </style>
+    </head>
+    <div style='text-align:left;display:inline-block;min-width:260px;'></div>
+    <div>
+        <fieldset>
+            <img src='gear_icon.ico' class='icon' alt='Configuration'> 
+            <header>Configuration</header>  
+            <br>
+            <div>
+                <label hidden>Board Name</label>
+                <input placeholder='Board Name' id='nm' value='[[nm]]'' data-chg='0' onchange="chg('nm')">
+            </div>
+            <div>
+                <label hidden>WiFi Name (SSID)</label><br>
+                <select id='id' data-chg='0' onchange="chg('id')">
+                    <option disabled selected>WiFi Name (SSID)</option>
+                    [[id_list]]
+                </select>
+            </div>
+            <div>
+                <label hidden>Password</label><br>
+                <input placeholder='Password (min 8 chars)' type='password' id='pw' data-chg='0' onchange="chg('pw')">
+                <br>
+                <input type="checkbox" onclick="showPw()">Show Password
+            </div>
+            <div>
+                <label>Assigned Color</label><br>
+                <input class='color' type='color' value='[[col]]' id='col' data-chg='0' onchange="chg('col')">
+            </div>
+            <div>
+                <label>Brightness</label><br>
+                <input class='range' type='range' min='0' max='255' value='[[brt]]' id='brt' data-chg='0' oninput="document.getElementById('brtval').value=this.value" onchange="chg('brt')">
+                <br>
+                <output id='brtval'>[[brt]]</output>
+            </div>
+            <br>
+            <div>
+                <button onclick='sv()'>Save All</button>
+            </div>
+        </fieldset>
+        <script id='jsbin-javascript'>
+            function showPw() {
+                var x = document.getElementById('pw');
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
+            }
+            function chg(key) {
+                document.getElementById(key).dataset.chg = '1';
+            }
+            function sv() {
+                var url = '?req=1';
+                for (const key of ['id', 'pw', 'nm', 'col', 'brt']) {
+                    if (document.getElementById(key).dataset.chg == '1') {
+                        url += ('&' + key + '=' + encodeURIComponent(document.getElementById(key).value));
+                    }
+                }
+                var request = new XMLHttpRequest();
+                request.open('GET', url, false);
+                request.send(null);
+                if (url.includes('&')) {
+                    alert('Updated Settings');
+                }
+            }
+        </script>
+    </div>
+    <div>
+        <fieldset>
+            <img src='box-health-pulse-status.ico' class='icon' alt='Status'>
+            <header>Status</header>
+            <div>
+                <table>
+                    <tr>
+                        <td>Board Name</td>
+                        <td>[[nm]]</td>
+                    </tr>
+                    <tr>
+                        <td>SSID</td>
+                        <td>[[id]]</td>
+                    </tr>
+                    <tr>
+                        <td>Assigned Color</td>
+                        <td>[[col]]</td>
+                    </tr>
+                    <tr>
+                        <td>Lamp Brightness</td>
+                        <td>[[brt]]</td>
+                    </tr>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+</html>
